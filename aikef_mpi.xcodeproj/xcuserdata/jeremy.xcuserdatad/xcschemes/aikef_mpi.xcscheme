@@ -72,7 +72,11 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)"
+            argument = "-wdir $(BUILT_PRODUCTS_DIR)"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "$(EXECUTABLE_PATH)"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

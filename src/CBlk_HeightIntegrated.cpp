@@ -10,7 +10,7 @@
 //!-------------------------------------------------------------//
 void CBlock::set_Hint_to_field(INT32 src_field_id,
 			       INT32 dest_field_id,
-			      double  *num_uniform_Nodes,
+			      short  *num_uniform_Nodes,
 			      D_REAL *origin_for_hInt,
 			      D_REAL *LBox_for_hInt,
 			      D_REAL *Hint_array,

@@ -45,7 +45,7 @@ INT32 SFC_Indices_to_BlkNr(INT32 *indices, INT32 level)
 
 	//! specify number of dimensions
 	const int num_dims=3;
-	bitmask_t Coord[3] = {(bitmask_t)indices[0], (bitmask_t)indices[1], (bitmask_t)indices[2]};
+	bitmask_t Coord[3] = {static_cast<bitmask_t>(indices[0]), static_cast<bitmask_t>(indices[1]), static_cast<bitmask_t>(indices[2])};
 
 
 	//! NOTE:

@@ -31,18 +31,19 @@ void CBlock::init_Eta_Profile(void)
 	//!     	 defines.h for low eta values (~1.)
 	//!           -> leap Frog discretisation for BField
 
-	const D_REAL Eta_Obstacle = 1e-3; //10.*vec_len(V_sw)*2*R_Obstacle;
+
+	const D_REAL Eta_Obstacle =  25;//10.*vec_len(V_sw)*2*R_Obstacle;
 
 	//! define radius in which Eta_Obstacle shall be used
-	const D_REAL R_Eta_Obstacle = 0.9*R_Obstacle;
+	const D_REAL R_Eta_Obstacle = 1*R_Moon;
 	
 	
 	//! Either use fermi profile or smoothing for transition from
 	//! Eta_Obstacle to background eta (Eta_sw)
-	const bool use_eta_fermi = false;//true;
+	const bool use_eta_fermi = true;//true;
 	//! fermi profile for resistivity given by
 	//! Eta= Eta_Obstacle *1./(exp((r - R_Eta_Obstacle)*fermi_slope)+1.);
-	const D_REAL fermi_slope = 1e-1;
+	const D_REAL fermi_slope = 40;
 	
 	
 	//! Decide if a inverse fermi profile should be used
@@ -58,9 +59,9 @@ void CBlock::init_Eta_Profile(void)
 	const D_REAL fermi_slope_comet = 0.025;
 
         //! Use smooth framebox function
-        const bool use_eta_tanh = true;
-        const D_REAL fermi_slope_core_obstacle = .25;
-        const D_REAL fermi_slope_obstacle_sw   = .125;
+        const bool use_eta_tanh = false;
+        const D_REAL fermi_slope_core_obstacle = 20;
+        const D_REAL fermi_slope_obstacle_sw   = 20;
 
         const D_REAL R1 = obstacle_core_fraction * R_Obstacle;
         const D_REAL R2 = R_Eta_Obstacle;
@@ -77,7 +78,7 @@ void CBlock::init_Eta_Profile(void)
 	const D_REAL Eta_core_Obstacle = 0.;
 	const D_REAL Eta_core_Star     = 0.;
 
-	const D_REAL Eta_Star 	  = Eta_Obstacle;//10.*vec_len(V_sw)*2*R_Star;
+	const D_REAL Eta_Star 	  = 0.5*Eta_Obstacle;//10.*vec_len(V_sw)*2*R_Star;
   
 	//! define radius in which Eta_Obstacle shall be used
 	const D_REAL R_Eta_Star     = 0.9*R_Star;
@@ -334,7 +335,7 @@ D_REAL CBlock::Eta_tanh(D_REAL r, D_REAL R[], D_REAL eta[], D_REAL alpha[])
 //!    0 < r < R[0] => eta = eta[0];
 //! R[0] < r < R[1] => eta = eta[1];
 //! R[1] < r        => eta = eta[2];
-	return (eta[2] + (1+tanh((r-R[0])*alpha[0]))/2 * (  eta[2]- eta[0]  +     (eta[1]-eta[2]) * (1-tanh((r-R[1])*alpha[1]))/2));
-
+	//return (eta[2] + (1+tanh((r-R[0])*alpha[0]))/2 * (  eta[2]- eta[0]  +     (eta[1]-eta[2]) * (1-tanh((r-R[1])*alpha[1]))/2));
+	return (  eta[2]- eta[0]  +     (eta[1]-eta[2]) * (1-tanh((r-R[1])*alpha[1]))/2);
  
 }

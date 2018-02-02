@@ -1992,8 +1992,8 @@ void CHybrid::silo_output_2D(void)
 //		show_time(TIME_TOTAL, id_scratch_vector);
 //		silo_2DWrite_allCS(id_scratch_vector);
 	
-//		show_responsible_Proc(id_scratch_scalar);
-//		silo_2DWrite_allCS(id_scratch_scalar);
+		show_responsible_Proc(id_scratch_scalar);
+		silo_2DWrite_allCS(id_scratch_scalar);
 
 		silo_2DWrite_allCS(id_PhiDC);
 	}
@@ -2675,9 +2675,9 @@ void CHybrid::write_XBlock_Cut(INT32 Level, INT32 F_Type, CBlock* Block)
 
 	 INT32 COMP = COMPs_FType[F_Type];
 
-	 FILE_REAL Block_Cords[3] = {(float)Block->origin[1]+(float)Box_Origin[1],
-				     (float)Block->origin[2]+(float)Box_Origin[2],
-				     (float)Block->RLevel};
+	FILE_REAL Block_Cords[3] = {static_cast<FILE_REAL>(Block->origin[1]+Box_Origin[1]),
+		static_cast<FILE_REAL>(Block->origin[2]+Box_Origin[2]),
+		static_cast<FILE_REAL>(Block->RLevel)};
 	//! Write down root Block Cords
 	 Outfile2D.write(reinterpret_cast<char*> (Block_Cords), 3*sizeof(FILE_REAL));
 
@@ -2711,9 +2711,9 @@ void CHybrid::write_YBlock_Cut(INT32 Level, INT32 F_Type,CBlock* Block)
 
 	 INT32 COMP = COMPs_FType[F_Type];
 
-	 FILE_REAL Block_Cords[3] = {(float)Block->origin[0]+(float)Box_Origin[0],
-				     (float)Block->origin[2]+(float)Box_Origin[2],
-				     (float)Block->RLevel};
+	FILE_REAL Block_Cords[3] = {static_cast<FILE_REAL>(Block->origin[0]+Box_Origin[0]),
+		static_cast<FILE_REAL>(Block->origin[2]+Box_Origin[2]),
+		static_cast<FILE_REAL>(Block->RLevel)};
 	//! Write down root Block Cords
 	Outfile2D.write(reinterpret_cast<char*> (Block_Cords), 3*sizeof(FILE_REAL));
 
@@ -2750,9 +2750,9 @@ void CHybrid::write_ZBlock_Cut(INT32 Level, INT32 F_Type,CBlock* Block)
 
 	INT32 COMP = COMPs_FType[F_Type];
 
-	 FILE_REAL Block_Cords[3] = {(float)Block->origin[0]+(float)Box_Origin[0],
-				     (float)Block->origin[1]+(float)Box_Origin[1],
-				     (float)Block->RLevel};
+	FILE_REAL Block_Cords[3] = {static_cast<FILE_REAL>(Block->origin[0]+Box_Origin[0]),
+		static_cast<FILE_REAL>(Block->origin[1]+Box_Origin[1]),
+		static_cast<FILE_REAL>(Block->RLevel)};
 	//! Write down root Block Cords
 	Outfile2D.write(reinterpret_cast<char*> (Block_Cords), 3*sizeof(FILE_REAL));
 

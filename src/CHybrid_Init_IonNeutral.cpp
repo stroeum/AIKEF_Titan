@@ -270,6 +270,15 @@ void CHybrid::read_extern_Profile_uniform_grid(INT32 species, INT32 id_densityfi
 	extern_rho_file.read(reinterpret_cast<char*> (&Radius), sizeof(FILE_REAL));
 	extern_rho_file.read(reinterpret_cast<char*> (SI_Quantities), 4.*sizeof(FILE_REAL));
 
+        for(int i=0;i<3;i++)
+        {
+                //num_extern_nodes[i]= num_extern_Nodes[i];
+                extern_Origin[i] = extern_Origin[i]*R_Moon;
+                extern_Length[i] = extern_Length[i]*R_Moon;
+        }
+
+
+
 
 	log_file << "   Run-Name of extern profile : " << temp << endl;
 	
@@ -308,7 +317,7 @@ void CHybrid::read_extern_Profile_uniform_grid(INT32 species, INT32 id_densityfi
 // 	delete[] mesh_nds_pos;
 	//! but this is not neccessary if Box Origin is given relative to Box length
 	//! therefore, skip bytes
-	extern_rho_file.seekg(3*num_extern_box_nodes*sizeof(FILE_REAL),ios::cur);
+// 	extern_rho_file.seekg(3*num_extern_box_nodes*sizeof(FILE_REAL),ios::cur);
 	
 	INT32 uniform_grid_Field_Name_Size = 50;
 	char temp2[50];
@@ -596,46 +605,39 @@ inline D_REAL sigma_temp(D_REAL mass, D_REAL Et, D_REAL ER, D_REAL v_ms, D_REAL 
 //! --------------------------------------------------------------------------
 void CHybrid::init_velocity_dependent_rates(void)
 {
-	memset(velocity_rate,0,30*NUM_PARTICLE_SPECIES*sizeof(D_REAL));
+	memset(velocity_rate,0,500*NUM_PARTICLE_SPECIES*NUM_PARTICLE_SPECIES*NUM_NEUTRAL_SPECIES*sizeof(D_REAL));
 	//! velocity is supposed to be in km/s
 	
 	
 	for(INT32 species=0;species<num_Particle_Species;species++)
+	for(INT32 dest=0;dest<num_Particle_Species;dest++)
+	for(INT32 neutral=0;neutral<num_Neutral_Species;neutral++)
 	{
 		
 		//! velocity dependent part of reaction
 		//! O+ + H2O -> H2O+ + O
-		if(species==0)
+		if(species==0 && dest==1 && neutral==0)
 		{
-			for(INT32 v=0;v<30;v++)
+			for(INT32 v=0;v<500;v++)
 			{	
 				D_REAL vnorm = v*1e+03/SI_v0;
-				
-				const D_REAL A2 = 9e-08;
-				const D_REAL B2 = 1.2e-08;	
-				
-				const D_REAL mu2 = 16.*18./(16.+18.)*m_p;	
 				
 				const D_REAL v_cms = vnorm*SI_v0*1.e+02;
 				const D_REAL v_ms = vnorm*SI_v0;
 
-				D_REAL sigma_1  = (A2 - B2*log10(mu2*v_ms*v_ms/e) )*(A2 - B2*log10(mu2*v_ms*v_ms/e) )
-						- 1.5e-17*log10(v_cms);
+				const D_REAL CoM_to_Lab = 1.*28/(1+28);
 				
-				const D_REAL CoM_to_Lab = 1.*mu2/(16.*m_p);
-				
-				const D_REAL a1 = 10e9;
-				const D_REAL a2 = 1.7;
-				const D_REAL a3 = 0.001;
-				const D_REAL a4 = 0.441;
-				const D_REAL a5 = 5.86;
-				const D_REAL a6 = 3.82;
-				const D_REAL a7 = 3.2e-4;
+				const D_REAL a1 = 1.39e3;
+				const D_REAL a2 = 1.64;
+				const D_REAL a3 = 1.98;
+				const D_REAL a4 = 6.69e-1;
+				const D_REAL a5 = 21.9;
+				const D_REAL a6 = 4.15;
+				const D_REAL a7 = 3.23e-4;
 				const D_REAL a8 = 10;
 				const D_REAL ER = 25;
-				const D_REAL Et = -0.001;
+				const D_REAL Et = 2e-3;
 				
-				const D_REAL mu4 = 16.*18./(16.+18.)*m_p;	
 												
 				D_REAL sigma_10;
 				
@@ -646,9 +648,8 @@ void CHybrid::init_velocity_dependent_rates(void)
 				
 				sigma_10 *= 1.e-16;	
 					
- 				D_REAL sigma = 1./3.*(sigma_10 + 2.*sigma_1);
 			  
-				velocity_rate[v][species] = v_cms*2.*sigma*CoM_to_Lab;
+				velocity_rate[v][species][dest][neutral] = v_cms*2.*sigma_10*CoM_to_Lab;
 			  			
 			}	
 			species_does_chemical_reactions[species]=true;
@@ -657,35 +658,29 @@ void CHybrid::init_velocity_dependent_rates(void)
 		
 		//! velocity dependent part of reaction
 		//! OH+ + H2O -> H2O+ + OH
-		if(species==1)
+		if(species==0 && dest==2 && neutral==1)
 		{
-			for(INT32 v=0;v<30;v++)
+			for(INT32 v=0;v<500;v++)
 			{	
 				D_REAL vnorm = v*1e+03/SI_v0;
 				
-				const D_REAL A2 = 9e-08;
-				const D_REAL B2 = 1.2e-08;	
-				
-				const D_REAL mu2 = 17.*18./(17.+18.)*m_p;	
 				
 				const D_REAL v_cms = vnorm*SI_v0*1.e+02;
 				const D_REAL v_ms = vnorm*SI_v0;
 
-				D_REAL sigma_1  = (A2 - B2*log10(mu2*v_ms*v_ms/e) )*(A2 - B2*log10(mu2*v_ms*v_ms/e) )
-						- 1.5e-17*log10(v_cms);
 				
-				const D_REAL CoM_to_Lab = 1.*mu2/(17.*m_p);
+				const D_REAL CoM_to_Lab = 1.*16/(1+16);
 				
-				const D_REAL a1 = 10e9;
-				const D_REAL a2 = 1.7;
-				const D_REAL a3 = 0.001;
-				const D_REAL a4 = 0.441;
-				const D_REAL a5 = 5.86;
-				const D_REAL a6 = 3.82;
+				const D_REAL a1 = 3.01e5;
+				const D_REAL a2 = 1.6;
+				const D_REAL a3 = 0.1;
+				const D_REAL a4 = 3.01e-1;
+				const D_REAL a5 = 6.59;
+				const D_REAL a6 = 3.88;
 				const D_REAL a7 = 3.2e-4;
 				const D_REAL a8 = 10;
 				const D_REAL ER = 25;
-				const D_REAL Et = -0.001;
+				const D_REAL Et = -6.e-4;
 																
 				D_REAL sigma_10;
 				
@@ -696,9 +691,8 @@ void CHybrid::init_velocity_dependent_rates(void)
 				
 				sigma_10 *= 1.e-16;	
 					
- 				D_REAL sigma = 1./3.*(sigma_10 + 2.*sigma_1);
 			  
-				velocity_rate[v][species] = v_cms*2.*sigma*CoM_to_Lab;
+				velocity_rate[v][species][dest][neutral]= v_cms*2.*sigma_10*CoM_to_Lab;
 				
 			 }
  			species_does_chemical_reactions[species]=true;
@@ -709,72 +703,6 @@ void CHybrid::init_velocity_dependent_rates(void)
 		
 		//! velocity dependent part of reaction
 		//! H2O+ + H2O -> H2O+ + H2O
-		if(species==2)
-		{
-			for(INT32 v=0;v<30;v++)
-			{	
-				D_REAL vnorm = v*1e+03/SI_v0;
-				
-				const D_REAL A2 = 4.3e-08;
-				const D_REAL B2 = 9.5e-09;
-				const D_REAL mu2 = 18*18/(18+18)*m_p;
-				
-				const D_REAL v_ms = vnorm*SI_v0;
-
-				const D_REAL v_cms = v_ms*1.e+02;
-
-				D_REAL sigma_1  = (A2 - B2*log10(mu2*v_ms*v_ms/e) );
-				
-				const D_REAL CoM_to_Lab = 1.*mu2/(18.*m_p);
-			  
-				velocity_rate[v][species] = v_cms*2.*sigma_1*sigma_1*CoM_to_Lab;
-	
-			}
-			species_does_chemical_reactions[species]=true;
-		}	
-				
-		//! velocity dependent part of reaction
-		//! H+ + H2O -> H2O+ + H
-		if(species==4)
-		{
-			for(INT32 v=0;v<30;v++)
-			{
-				D_REAL vnorm = v*1e+03/SI_v0;
-				
-				const D_REAL a1 = 5.85e5;
-				const D_REAL a2 = 1.6;
-				const D_REAL a3 = 0.1;
-				const D_REAL a4 = 0.441;
-				const D_REAL a5 = 5.86;
-				const D_REAL a6 = 3.82;
-				const D_REAL a7 = 3.2e-4;
-				const D_REAL a8 = 10;
-				const D_REAL ER = 25;
-				const D_REAL Et = -0.001;
-				
-				const D_REAL mu4 = 1.*18/(1.+18.)*m_p;	
-				
-				const D_REAL v_ms = vnorm*SI_v0;
-
-				const D_REAL v_cms = v_ms*1.e+02;
-
-								
-				D_REAL sigma_40;
-				
-				sigma_40 =  a1*sigma_temp(1,Et,ER,v_ms,a2)/
-					( 1+sigma_temp(1,Et,a3,v_ms,a2+a4) + sigma_temp(1,Et,a5,v_ms,a2+a6) );
-					+ a7* a1* sigma_temp(1,Et,a8/ER,v_ms,a2)/
-					( 1+sigma_temp(1,Et,a8/a3,v_ms,a2+a4) + sigma_temp(1,Et,a8/a5,v_ms,a2+a6) );
-				
-				sigma_40 *= 1.e-16;	
-					
-				const D_REAL CoM_to_Lab = 1.*mu4/(1.*m_p);
-			  
-				velocity_rate[v][species] = v_cms*2.*sigma_40*CoM_to_Lab;
-				
-			}
-			species_does_chemical_reactions[species]=true;
-		}	
 		
 	}		
 }	

@@ -38,28 +38,28 @@ void CHybrid::inject_obstacle_ions(void)
 	if(TestParticle_Simulation)
 	  return; 
 
-#ifdef use_neutral_species_as_field
+/*#ifdef use_neutral_species_as_field
 	insert_ions_from_neutral_profile();
-#endif		
+#endif*/		
 	
 // 	insert_sphere_cylinder_ions(1);
 //	inject_Moon_ions(1);
-
+	insert_Titan_Ions();
 //	inject_footprint(0);
 
-        D_REAL O[3],w[3],R;
-        for (int i=0; i<3; i++) {
-          O[i] = Position_Star[i];
-	  if (use_synced_rot) {
-#if defined use_rotating_frame
-	    w[i] = w_Frame[i];
-#endif		
-	  } else {
-	    w[i] = w_Star[i];
-	  }
-        }
-        R  = R_Star;
-        inject_sphere_source(0,O,w,R);
+//         D_REAL O[3],w[3],R;
+//         for (int i=0; i<3; i++) {
+//           O[i] = Position_Star[i];
+// 	  if (use_synced_rot) {
+// #if defined use_rotating_frame
+// 	    w[i] = w_Frame[i];
+// #endif		
+// 	  } else {
+// 	    w[i] = w_Star[i];
+// 	  }
+//         }
+//         R  = R_Star;
+//         inject_sphere_source(0,O,w,R);
 
 	/*
         if (num_Charged_Species>1) {
@@ -76,7 +76,84 @@ void CHybrid::inject_obstacle_ions(void)
 	
 }
 
+void CHybrid::insert_Titan_Ions()
+{
+	clock_t start,finish;
+	double time;
+	start = clock();
+	
+	log_file<<"INJECTING IONS ..."<<endl;
+	
+	INT64* num_injected_particles_species = new INT64[num_ion_prod_fields];
+        memset(num_injected_particles_species, 0,num_ion_prod_fields*sizeof(INT64));
+	
+	//! adjust number of particles that are injected
+	//! do this only at second time step (first is used to get number of inserted particles)
+	if(TL==2 || TL==TL_at_last_restore_state+2)
+	{	
+		INT32 total_particles_to_insert=0;
+		for(INT32 species=0; species<num_Particle_Species; species++)
+		total_particles_to_insert += obstacle_MP_num_each_TL[species];
+		
+		insert_every_x_TL= int(insert_every_x_TL*num_newlyionised_particles/total_particles_to_insert + 1);	
+	}
+	
 
+	//! go over every level
+	for(INT32 level=0; level<=MAX_LEVEL; level++)
+	{
+		CBlock* temp_Block = BlockList_of_Lev[level];
+		while(temp_Block)
+		{
+// 			if(mpi_myRank == temp_Block->responsible_mpi_process)
+// // 			  if(!temp_Block->child_array)
+// 			    temp_Block->inject_extern_photorate(); 
+			    //! If the process is responsible for block, proceed
+			    if(mpi_myRank==temp_Block->responsible_mpi_process)
+			      for(INT32 oct=0; oct<8; oct++)
+			      {
+				//! maybe just a oct of block is refined 
+				if(!temp_Block->child_array[oct])
+				  temp_Block->insert_ions_from_ionprod_file(insert_every_x_TL,oct,num_injected_particles_species);
+				
+			      }
+
+			
+			temp_Block = temp_Block->next_Blk_of_BlockList;
+		}
+	
+	}
+
+	//! Provide Information about how many partilce were injected in total
+	INT64 local_info_values[num_ion_prod_fields];
+	stringstream info_names[num_ion_prod_fields];
+	
+// 	for(INT32 neutralSpec=0; neutralSpec<num_ion_prod_fields; neutralSpec++)
+	 for(INT32 species=0; species<num_ion_prod_fields; species++)
+	 {
+		 
+		local_info_values[species] = num_injected_particles_species[species];
+		info_names[species] << "   ->injected particles of species "<<species+num_Inflow_Species<< " from neutral species "<<species<<" : ";		
+	 }	
+
+	//! Reduce via MPI if required
+	show_information(local_info_values,
+		info_names,
+		num_ion_prod_fields,
+		BUILD_SUM);
+	
+	//! get number of inserted particles to adjust this number in next time step
+	if(TL==1 || TL==TL_at_last_restore_state+1)
+// 	for(INT32 neutralSpec=0; neutralSpec<num_Neutral_Species; neutralSpec++)
+	 for(INT32 species=0; species<num_ion_prod_fields; species++)
+	  num_newlyionised_particles += local_info_values[species];
+ 
+ 
+	finish = clock();
+	time = (double(finish)-double(start))/CLOCKS_PER_SEC;
+	log_file << "  inject heavy ion time: " << time << "s." << endl << endl;
+
+}
 
 //!--------------------------------------------------------
 //!- inject ions for simple geometries:

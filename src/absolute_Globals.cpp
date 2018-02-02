@@ -76,7 +76,7 @@
 	INT64 *num_out_of_Box, *num_in_obst;
 	
 	//! charge exchange related
-	D_REAL velocity_rate[30][NUM_PARTICLE_SPECIES];
+	D_REAL velocity_rate[500][NUM_PARTICLE_SPECIES][NUM_PARTICLE_SPECIES][NUM_NEUTRAL_SPECIES];
 		
         bool species_does_chemical_reactions[NUM_PARTICLE_SPECIES];
 	

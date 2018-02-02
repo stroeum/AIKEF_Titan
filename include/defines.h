@@ -6,43 +6,43 @@
 //#define useSPICE	
 
 //! number of species that are treated as particles
-#define NUM_PARTICLE_SPECIES 1
+#define NUM_PARTICLE_SPECIES 5
 //! for chemical reactions array
-#define NUM_NEUTRAL_SPECIES 1
+#define NUM_NEUTRAL_SPECIES 3
 
 
 #define use_neutral_species_as_field
 #define use_ion_production_as_field
-#define use_dust_species_as_field
+//#define use_dust_species_as_field
 
 
 //! -------------- FORCE RELATED -----------------------------------------
 //! define this to use gravity force from the obstacle
-#define use_gravity
+//#define use_gravity
 
 
 //! -------------- ROTATING FRAME RELATED --------------------------------
 //! define this to use centrifugal and Coriolis acceleration
-#define use_rotating_frame
+//#define use_rotating_frame
 
 
 //! -------------- FIELD RELATED -----------------------------------------
 
 //! define this to use a dipole field as background
-#define USE_CFBG_BFIELD
+//#define USE_CFBG_BFIELD
 
 //! Define this to use a better smooth_Field method
 #define use_new_smooth_Field_method
 
 
-#define NUM_SUB_CYCLE  7 
+#define NUM_SUB_CYCLE  9 
 
 
 //! defines to switch off/on physical parts
 //! of the E/BField Equation
 #define CONVEC_TERM
 #define HALL_TERM
-#define gradPE_TERM
+//#define gradPE_TERM
 
 //! switch on/off use eta in Leap Frog method.
 //! Must be off if advance_obstacle_B
@@ -53,16 +53,16 @@
 // #define ETA_TERM_EField
 
 
-#define nonadiabatic_gradPE_TERM
-#define nonadiabatic_gradPE_COLLISION_TERM
-#define nonadiabatic_gradPE_SOURCE_TERM
-#define nonadiabatic_gradPE_DRAIN_TERM
+//#define nonadiabatic_gradPE_TERM
+//#define nonadiabatic_gradPE_COLLISION_TERM
+//#define nonadiabatic_gradPE_SOURCE_TERM
+//#define nonadiabatic_gradPE_DRAIN_TERM
 
 //! Set nonadiabatic_gradPE_TERM_derivation_form to
 //! 0 : non-conservative form
 //! 1 : conservative form
 //! 2 : conservative form using extra field (id_scratch_scalar) for pow(PE, 1./kappa_electron)
-#define nonadiabatic_gradPE_TERM_derivation_form 0
+#define nonadiabatic_gradPE_TERM_derivation_form 2
 // #define nonadiabatic_gradPE_TERM_set_divUe_to_zero_DEBUG
 
 //! Set nonadiabatic_gradPE_TERM_curl_derivation_form to
@@ -74,7 +74,7 @@
 
 
 //! define this if you want to smooth PE similar to E and B
-// #define nonadiabatic_gradPE_TERM_smooth_PE
+#define nonadiabatic_gradPE_TERM_smooth_PE
 
 //! define this to ensure PE >= 0
 #define nonadiabatic_gradPE_TERM_ensure_PE_not_negative
@@ -96,14 +96,14 @@
 //! NOTE: good old AIKEF with adiabatic electron pressure assumes
 //!       homogeous electron pressure defined by Electron_Betas
 //!       as initial value
-#define nonadiabatic_gradPE_initial_condition 1
+#define nonadiabatic_gradPE_initial_condition 0
 
 //! If you use nonadiabatic_gradPE_TERM
 //! you have to decide, whether Pe shall be advanced
 //! together with B or in an extra loop using 
 //! the explicit midpoint method.
 //! In the first case, define nonadiabatic_gradPE_TERM_advance_Pe_with_B
-#define nonadiabatic_gradPE_TERM_advance_Pe_with_B
+//#define nonadiabatic_gradPE_TERM_advance_Pe_with_B
 
 
 
@@ -219,7 +219,7 @@ typedef Vec2d VEC2_D_REAL;
 #define NUM_FIELDS  	122
 
 //! for run and file names
-#define RUN_NAME_SIZE   100
+#define RUN_NAME_SIZE   40
 
 //! num refinement criteria
 #define NUM_CRITERIA  	5

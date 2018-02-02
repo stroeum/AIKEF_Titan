@@ -59,15 +59,15 @@ clean:
 	find . \( -name "*.o" -o -name "${EX}" -o -name "process_*.log" \) -exec rm -rfv {} \;
 	rm -rfv bin/*
 
-run:
 		#@echo Deleting old files...
 		#rm -f bin/State/*
 		#rm -f bin/Last_State/*
 		#rm -f $(wildcard bin/process_*.log)
-		@echo Starting AIKEF...
 		#mpirun -np $(CORES) -wdir ${EXEDIR} nice -19 ./${EX} &
-		/usr/local/Cellar/open-mpi/3.0.0_2/bin/mpirun -np 2 bin/./aikef_mpi > log/aikef.log &
 		#msub -l walltime=${RUNTIME},nodes=${NODES}:ppn=${PPN} -m abe -M ${MAIL} -j oe -o ${EXEDIR}/log_${MYCASE}.out -v EXEDIR=${EXEDIR},EX=${EX},MYCASE=${MYCASE} start.job > ${EXEDIR}/JOB.ID
+run:
+		@echo Starting AIKEF...
+		/usr/local/Cellar/open-mpi/3.0.0_2/bin/mpirun -np 2 -wdir ${EXEDIR} ./aikef_mpi > log/aikef.log 
 
 stop:
 	ifeq ($(TYPE),$(filter $(TYPE),home_gcc home_icc home_gcc_O3 home_icc_O3 home_clang home_clang_O3))

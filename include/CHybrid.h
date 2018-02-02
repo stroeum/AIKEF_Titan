@@ -591,6 +591,7 @@ void insert_enceladus_ions(INT32 species);
 void inject_Moon_ions(INT32 species);
 void inject_footprint(INT32 species);
 void inject_sphere_source(INT32 species, D_REAL O[], D_REAL w[], D_REAL R);
+void insert_Titan_Ions();
 void insert_Titan_Ions(INT32 species);
 void insert_Mars_Ions(void);
 void inject_obstacle_ions(void);

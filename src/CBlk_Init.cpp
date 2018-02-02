@@ -457,54 +457,61 @@ void CBlock::init_blk_boundaries(void)
 
 	//! check whether obstacle overlaps with this block
 	//! (to avoid some calculations in particle move)
+	if(     origin[0]			     >= +R_Obstacle
+	     || origin[0] + Blk_Length_of[RLevel][0] <= -R_Obstacle)
+	is_box_boundary[7] = false;
+	else
+	{
 
-	D_REAL O[3] = {0.,0.,0.};
-	D_REAL M[3] = {0.,0.,0.};
-        INT32 delta[8][3]= {
-          {0,0,0},
-          {1,0,0},
-          {1,1,0},
-          {0,1,0},
-          {0,0,1},
-          {1,0,1},
-          {1,1,1},
-          {0,1,1}
-        };
-        D_REAL OM[3] = {0.,0.,0.};
+		//!---------- Y Direction ----------------------------------
+		if(     origin[1]			     >= +R_Obstacle
+		     || origin[1] + Blk_Length_of[RLevel][1] <= -R_Obstacle)
+		is_box_boundary[7] = false;
+		else
+		{
+	
+			//!---------- Z Direction ----------------------------------
+			if(   origin[2]			            >= +R_Obstacle
+			    || origin[2] + Blk_Length_of[RLevel][2] <= -R_Obstacle)
+			is_box_boundary[7] = false;
+			else
+			is_box_boundary[7] = true;
+			
+	
+		}
 
-        is_box_boundary[_OBS_] = false;
+	}
+	//! The same routine for Second Obstacle (Star) that simply skips blocks that already are flagged as obstacle containing
+	if(use_Star && !is_box_boundary[7])
+	{	
+		//! TODO not sure if it has to be  "-" or "+" Position_SecondObstacle[0]
+		//!---------- X Direction ----------------------------------
+		if(     origin[0] - Position_Star[0]			  >= +R_Star 
+		|| origin[0] + Blk_Length_of[RLevel][0] - Position_Star[0]<= -R_Star )
+		is_box_boundary[7] = false;
+		else
+		{
 
-        /* 
-         * Check if 1st obstacle belongs at least partially to current Blk
-         */
-        for (int i=0; i<8; i++) {
-          for (int n=0; n<3; n++) {
-            O[n]  = 0.;
-            M[n]  = origin[n] + delta[i][n]*Blk_Length_of[RLevel][n];
-            OM[n] = M[n] - O[n];
-          }
-          if (vec_len(OM) <= R_Obstacle) {
-            is_box_boundary[_OBS_] = true;
-            break;
-          }
-        }
+			//!---------- Y Direction ----------------------------------
+			if(     origin[1] - Position_Star[1]			   >= +R_Star 
+			|| origin[1] + Blk_Length_of[RLevel][1] - Position_Star[1] <= -R_Star )
+			is_box_boundary[7] = false;
+			else
+			{
+		
+				//!---------- Z Direction ----------------------------------
+				if(   origin[2]	- Position_Star[2]		           >= +R_Star 
+				|| origin[2] + Blk_Length_of[RLevel][2] - Position_Star[2] <= -R_Star )
+				is_box_boundary[7] = false;
+				else
+				is_box_boundary[7] = true;
+				
+		
+			}
 
-        /* 
-         * Check if 2nd obstacle belongs at least partially to current Blk
-         */
-	if( use_Star && !is_box_boundary[_OBS_]) {
-          for (int i=0; i<8; i++) {
-            for (int n=0; n<3; n++) { 
-              O[n]  = Position_Star[n];
-              M[n]  = origin[n] + delta[i][n]*Blk_Length_of[RLevel][n];
-              OM[n] = M[n] - O[n];
-            }
-            if (vec_len(OM) <= R_Star) {
-              is_box_boundary[_OBS_] = true;
-              break;
-            }
-          }
-        }
+		}
+	}
+
 }
 
 

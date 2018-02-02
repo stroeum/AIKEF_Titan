@@ -2352,8 +2352,8 @@ void CHybrid::show_responsible_Proc(INT32 field_id)
 
 			if(temp_Block->responsible_mpi_process==mpi_myRank)
 			for(INT32 b=0; b<num_nodes_in_block; b++)
-			temp_Block->Field_Type[field_id][b] = mpi_myRank;
-// 			temp_Block->Field_Type[field_id][b] = temp_Block->Block_Nr;
+//			temp_Block->Field_Type[field_id][b] = mpi_myRank;
+ 			temp_Block->Field_Type[field_id][b] = temp_Block->is_box_boundary[7];
 
 
 			temp_Block = temp_Block->next_Blk_of_BlockList;
@@ -2537,7 +2537,7 @@ void CHybrid::collect_Energy_Momentum_Mass(void)
 				   total_collected_temperature[0],
 				   total_collected_temperature[1],
 				   total_collected_temperature[2],
-				   (D_REAL)num_total_particles};
+		static_cast<D_REAL>(num_total_particles)};
 // 
 // 
 // 

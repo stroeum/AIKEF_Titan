@@ -136,11 +136,11 @@ const D_REAL G = 6.67384e-11; // Gravitational constant m3 kg-1 s-2;
 
 //! Normalisation quantities
 //! Magnetic Field in Telsa
-const D_REAL SI_B0 = 7.5e-9;
+const D_REAL SI_B0 = 5.93e-9;
 //! Number Density in Particle per Cubicmeter
-const D_REAL SI_n0 = 7.5e+2;
+const D_REAL SI_n0 = 0.15e+6;
 //! Mass of normalization species in amu
-const D_REAL SI_m0 = 1*m_p;
+const D_REAL SI_m0 = 16*m_p;
 //! Alfvén Velocity in Meters per Seconds
 const D_REAL SI_v0 = SI_B0/sqrt(mu_0*SI_n0*SI_m0);
 //! Inverse Ion Gyration Frequency in Seconds
@@ -158,11 +158,11 @@ const D_REAL SI_MM0 = 4*pi/mu_0*SI_B0*pow(SI_x0,3.0);
 //! Angle of Magnetic Field to Solar Wind Velocity in deg
 const D_REAL B_angle = 90;
 // const D_REAL B_sw[3] = {cos(B_angle*M_PI/180.), sin(B_angle*M_PI/180.), 0};
-const D_REAL B_sw[3] = {0., 0., 0.};
+const D_REAL B_sw[3] = {0., 0., -1.};
 
 //! Velocity of Solar Wind / upstream plasma
 //! in Metre Per Second;
-const D_REAL SW_v = 10.0e+3;
+const D_REAL SW_v = 120.0e+3;
 
 //! Alfvénic Mach Number
 const D_REAL MA = SW_v/SI_v0;
@@ -247,25 +247,25 @@ D_REAL w_Frame[3] = {0., 0., 2*pi*SI_t0/T_HD179949b};
 //! - ELSE INTERPOLATION AT BOUNDARIES FAILS FOR SOME REASON !!!     -
 //!   (maybe child to parent field method ?!?)
 //! ------------------------------------------------------------------
-const INT32 BlkNds_X = 20;
-const INT32 BlkNds_Y = 10;
-const INT32 BlkNds_Z = 10;
+const INT32 BlkNds_X = 8;
+const INT32 BlkNds_Y = 8;
+const INT32 BlkNds_Z = 8;
 
 //! Number of Root Blocks in Szenario
-const INT32 RB_X = 8; 
-const INT32 RB_Y = 8;
-const INT32 RB_Z = 8;
+const INT32 RB_X = 16; 
+const INT32 RB_Y = 16;
+const INT32 RB_Z = 16;
 
 //! Radius of Enceladus
 //! (is used instead of R_Obstacle for geometry of neutral cloud since some
 //!  test simulations had R_Obstable=0 but boxsize and axis should still
 //!  be given in Enceladus radii)
-const D_REAL R_Moon = 250.e+3/SI_x0;
+const D_REAL R_Moon = 2575.e+3/SI_x0;
 
 //! Size of simulation box
-const D_REAL LX = 1200.;
-const D_REAL LY = 600.;
-const D_REAL LZ = 600.;
+const D_REAL LX = 10.*R_Moon;
+const D_REAL LY = 10.*R_Moon;
+const D_REAL LZ = 10.*R_Moon;
 
 //! use periodic Boundaries;
 //! every particle leaving the simulation box at any side is inserted
@@ -301,7 +301,7 @@ const F_REAL resistive_bound_dist[]  = {0.,0.,
 //! set cometary boundary conditions
 //! In case of using the extended upstream boundary conditions 
 //! the values of massloading needs to be calculate before starting the time loop
-const bool extended_upstream_boundary_conditions = true;
+const bool extended_upstream_boundary_conditions = false;
 
 //! General remark on Boundary conditions:
 //! 1. entry: x_min-side        2. entry: x_max-side
@@ -318,14 +318,14 @@ const bool extended_upstream_boundary_conditions = true;
 const D_REAL omega_rotating_obs[3] = {0., 0., 0.};
 
 //! Radius of Obstacle
-const D_REAL R_Obstacle = 50.;
+const D_REAL R_Obstacle = R_Moon+1000000/SI_x0;
 
 //! Mass of Obstacle 
 //const D_REAL M_Obstacle = (R_Obstacle*SI_x0*SI_v0*SI_v0)/(2.*G*SI_m0);
 const D_REAL M_Obstacle = M_HD179949b/SI_m0; 
 
 //! Origin of simulationbox (= Position of Obstacle)
-const D_REAL Box_Origin[3] = { 950./1200. * LX, 0.5 * LY, 0.5 * LZ};
+const D_REAL Box_Origin[3] = { 0.501 * LX, 0.501 * LY, 0.501 * LZ};
 //const D_REAL Box_Origin[3] = { 5./6. * LX, 0.5 * LY, 0.5 * LZ};
 
 //! Angular velocity of the obstacle. 
@@ -358,13 +358,13 @@ const D_REAL Magnetic_Moment_Offset[3] = {0., 0., 0.};
 //!-------------------------------------------------------------//
 
 //! for two body simulations: activate second obstacle
-const bool use_Star = true;
+const bool use_Star = false;
 
 //! Radius of Obstacle
-const D_REAL R_Star = 100.;
+const D_REAL R_Star = 0.51*R_Moon;
 
 //! Position of Second Obstacle
-const D_REAL Position_Star[3] = {-800.0,0.,0.}; 
+const D_REAL Position_Star[3] = {16.5*R_Moon, 0.,0.}; 
 //const D_REAL Position_Star[3] = { .75, 0, 0};
 
 //! Mass of Second Obstacle
@@ -390,7 +390,7 @@ D_REAL w_Star[3] =  {0., 0., 0*2*pi*SI_t0/T_HD179949}; //  sqrt((G*M_Star*SI_m0)
 const D_REAL V_esc = sqrt((2.*G*M_Star*SI_m0)/(R_Star*SI_x0))/SI_v0; 
 
 // Stellar wind velocity
-const D_REAL V_sw[3] = {V_esc*1., 0., 0.};
+const D_REAL V_sw[3] = {MA, 0., 0.};
 //const D_REAL V_sw[3] = {V_esc*.5, 0., 0.};
 
 //! MM is defined such that at the origin MM and BField are parallel.
@@ -403,7 +403,7 @@ const D_REAL MM_Star = Bh_sw*pow(Position_Star[0]*Position_Star[0] + Position_St
 //const D_REAL Magnetic_Moment_Star[3] = { 0., 0., 1.e6};// see calculation (notebook JAR#14p39)
 //const D_REAL Magnetic_Moment_Star[3] = { 0., 0., a_HD179949b*a_HD179949b*R_HD179949b/pow(SI_x0,3.0)};// see calculation (notebook JAR#14p39)
 
-const D_REAL Magnetic_Moment_Star[3] = { 0., 0., 1e7};
+const D_REAL Magnetic_Moment_Star[3] = { 0., 0., 0.*1e7};
 
 //! Tilt angle in degree
 const D_REAL Magnetic_Moment_Angle_Star[2] = {0., 0.};
@@ -438,9 +438,9 @@ const bool use_hom_particle_bounds[7] = {
 //! NOTE: Up to now applying outflow boundaries for particle at min-sides
 //!       does not work well (Due to assymetry in gather method).
 const bool use_particle_inflow_bounds[6] = {
-    false, false,
-    false, false,
-    false, false
+    true, false,
+    true, true,
+    true, true
   };
 
 
@@ -475,11 +475,11 @@ const bool use_hom_B_bounds[7] = {
   
 
 //! set new IMF after TL_new_Bsw (e.g. sector border, magnetopause crossing)
-const D_REAL new_B_sw[3] = {0., 0., 1.};
+const D_REAL new_B_sw[3] = {0.26, -0.48, -0.84};
 
 //! TL when new BField boundaries shall be set
 //! (set zero to switch off)
-const INT32 TL_new_Bsw = 0;
+const INT32 TL_new_Bsw = 100001;
 
 //! in order to avois sharp transition rotate old to
 //! new field within finite time
@@ -511,28 +511,28 @@ const bool set_BFieldInflow_at_VelocityInflow = false;
 
 //! specify boundaries for Bfield
 const bool use_B_inflow_bounds[6] = {
-    false, false,
+    true, false,
     false, false,
     false, false
   };
 
 //! specify boundaries for EField
   const bool use_E_inflow_bounds[6] = {
-    false, false,
-    false, false,
-    false, false
+    true, false,
+    true, true,
+    true, true
   };
   
 //! specify boundaries for UField
   const bool use_U_inflow_bounds[6] = {
-    false, false,
-    false, false,
-    false, false
+    true, false,
+    true, true,
+    true, true
   };
   
 #if defined nonadiabatic_gradPE_TERM
   const bool use_PE_inflow_bounds[6] = {
-    false, false,
+    true, false,
     false, false,
     false, false
   };
@@ -571,14 +571,14 @@ const char file_names_EBF[][RUN_NAME_SIZE] = {"nSW_bounds.txt" , "nCI_bounds", "
 //!-------------------------------------------------------------//
 
 //! name of simulation run (used as a prefix for each file)
-const char Run_Name[RUN_NAME_SIZE] = "test";
+const char Run_Name[RUN_NAME_SIZE] = "T36";
 
 //! set output path relative to directory of executable
-//const char data_output_path[RUN_NAME_SIZE] = "./data";
-const char data_output_path[RUN_NAME_SIZE] = "/Users/jeremy/Gdrive/Academic/0-Projects/5-AIKEF/0-Codes/Titan/output";
+const char data_output_path[RUN_NAME_SIZE] = "../output";
+
 
 //! End Run when TL_MAX is reached
-const INT32 TL_MAX = 100e6;
+const INT32 TL_MAX = 200000;
 
 
 //! SET 0 TO SWITCH OFF RESPECTIVE OUTPUT 
@@ -600,13 +600,13 @@ const INT32 TL_MAX = 100e6;
 bool SILO_STYLE_ZONAL = false;
 
 
-const INT32  TL_OUTPUT_2D_SILO         =   0;
+const INT32  TL_OUTPUT_2D_SILO         =   00000;
 const INT32  TL_OUTPUT_2D_NATIVE       =   0;
 const INT32  TL_OUTPUT_2D_GNUPLOT      =   0;
 
-const INT32  TL_OUTPUT_3D_SILO         = 1000;
+const INT32  TL_OUTPUT_3D_SILO         = 100000;
 const INT32  TL_OUTPUT_3D_NATIVE       =   0;
-const INT32  TL_OUTPUT_3D_uniform_grid =   0;
+const INT32  TL_OUTPUT_3D_uniform_grid =  100000;
 const INT32  TL_OUTPUT_3D_ASCII        =   0;
 
 //! Enable HDF5 GZIP Compresion for SILO-Output
@@ -626,9 +626,9 @@ const INT32 TL_OUTPUT_ErgMomMass        = 0;
 
 const INT32 TL_OUTPUT_LINEOUT           = 0;
 //!  Particle Detctor Output
-const INT32 TL_OUTPUT_PARTICLE_DETECTOR = 0;
+const INT32 TL_OUTPUT_PARTICLE_DETECTOR = 00000;
 //! track path of trajectory and write 1dim field data
-const INT32 TL_OUTPUT_TRAJECTORY        = 0;
+const INT32 TL_OUTPUT_TRAJECTORY        = 00000;
 
 const INT32 TL_OUTPUT_PARTICLE_TRACKS   = 0;
 
@@ -643,7 +643,7 @@ const INT32 TL_OUTPUT_GETMESH           = 0;
 //! For each block the responsible MPI process will be stored, hence simulations that
 //! were operated on N process must not be re-started with a number of processes
 //! smaller than N, yet they can be re-started with a number larger than N.
-const INT32 TL_SAVE_STATE  = 1000;
+const INT32 TL_SAVE_STATE  = 2000;
 
 //! OPTOIONS:
 //! - LEAVE_UNCHANGED
@@ -666,15 +666,15 @@ const bool read_hdf_state=false;
 
 //! Secure State File
 //! after a successfull restore the code mv the folder State to StateTLXXXXXX
-const bool secure_state_file = true;
+const bool secure_state_file = false;
 
 //! resubmit of jobfile
 //!resubing job if TL_Max is not reached at the end of the Walltime
 //!Walltime must be in second
-bool resubmit_enable = false;
+bool resubmit_enable = true;
 const INT32 resubmit_walltime =12*3600;
-const char resubmit_jobscript[100] = "msub /home/h/nipjriou/aikef";
-const INT32 resubmit_security_factor = 1.5*3600;
+const char resubmit_jobscript[100] = "msub job.sh";
+const INT32 resubmit_security_factor = 60*12;
 
 //!-----------------------------------------------------------------
 //!---------- silo output related -------------------------------
@@ -682,7 +682,7 @@ const INT32 resubmit_security_factor = 1.5*3600;
 
 //! use factor eg. to scale coordinated from normalized to SI units
 //! in visit visualisation.
-const F_REAL factor_scale_mesh = 1.;
+const F_REAL factor_scale_mesh = 1./R_Moon;
 
 //! Only for 2D output
 //! Do not cut through GN Planes in depth direction
@@ -703,7 +703,7 @@ const char visit_ylabel[20] = " y";
 const char visit_zlabel[20] = " z";
 
 //! specify length unit of coordinate axis
-const char visit_length_unit[20] = "x0";
+const char visit_length_unit[20] = "R_T";
 
 
 //!-----------------------------------------------------------------
@@ -722,16 +722,16 @@ const char visit_length_unit[20] = "x0";
 
 
 //! specify whether additional time string should be read
-const bool do_read_timestring = false;
+const bool do_read_timestring = true;
 
 //! reading the measured field (column 5,6,7) and write into new file
-const bool do_read_SpaceCraftField = false;
+const bool do_read_SpaceCraftField = true;
 
 //! specify how many trajectories shall be traced
 const INT32 num_trajectories = 0;
 
 //! specify names of files in which positions of trajectories are strored
-const char Trajectory_FileName[][RUN_NAME_SIZE] = { "Orbit_m6_Z0",
+const char Trajectory_FileName[][RUN_NAME_SIZE] = { "T36_tiis_1s",
                                                     "Orbit_m6_invY_Z0",
                                                     "CA_MP_BS_m6",
                                                     "CA_MP_BS_m6_invY"};
@@ -739,7 +739,7 @@ const char Trajectory_FileName[][RUN_NAME_SIZE] = { "Orbit_m6_Z0",
 
 //! if trajctory file is not given in normalized units, the positions
 //! have to be normalized (by ion inertia length)
-const D_REAL trajectory_pos_conversion_fact=1.;
+const D_REAL trajectory_pos_conversion_fact=2575./R_Moon;
 
 //! decide whether to trace trajectory or only to display in 2D out
 //! (latter one applyies especially to marks such as MP or BS)
@@ -762,7 +762,7 @@ const INT32 num_fields_to_trace = 1;
 //! etc ...
 
 //! specify which fields to trace via field id defined in defines.h
-const INT32 ID_of_Fields_to_trace[] = {id_rho_np1};
+const INT32 ID_of_Fields_to_trace[] = {id_BTotal, id_rho_np1};
                                       /*
                                         id_BTotal,
                                         id_average_Field1,
@@ -796,18 +796,20 @@ const D_REAL lineout_pos_conversion_fact=1.;
 //! since these names are also used as variable names for
 //! silo ouput, only alphanumeric characters are allowed
 //! (especially no "." )
-const char LineOut_FileName[][RUN_NAME_SIZE] = {
-    "lineX",
-    "lineY",
-    "lineZ"
+const char LineOut_FileName[][RUN_NAME_SIZE] = {"New_Horizons",
+    "New_Horizons2",
+    "New_Horizons3",
+    "New_Horizons4",
+    "New_Horizons5",
+    "New_Horizons6"
   };
 
 
 //! Number of fields in Lineout Output                                              
-const INT32 num_fields_to_trace_lineout = 1;
+const INT32 num_fields_to_trace_lineout = 5;
 
 //! specify which fields to trace via field id defined in defines.h
-const INT32 ID_of_Fields_to_trace_lineout[] = {id_rho_np1};
+const INT32 ID_of_Fields_to_trace_lineout[] = {id_rhoSpecies1, id_rhoSpecies1+1,id_rhoSpecies1+2,id_UI_Species1,id_UI_plus };
   /*
     ENERGY_SPECTRUM,
     id_PEtotal
@@ -911,10 +913,10 @@ const INT32 numNds_uniform_gridMesh[3] = {
 const F_REAL uniform_grid_shrink_domain[3] = {1., 1., 1.};
 					
 //! number of fields which should appear in uniform_grid visualization
-const INT32 uniform_grid_num_fields_to_trace = 8;
+const INT32 uniform_grid_num_fields_to_trace = 2;
 
 //! id's of fields which should appear in uniform_grid visualization
-const INT32 uniform_grid_ID_of_Fields_to_trace[] = {
+const INT32 uniform_grid_ID_of_Fields_to_trace[] = {id_BTotal, id_EField,
   id_rho_np1,
   id_UI_plus,
   id_BTotal,
@@ -931,7 +933,7 @@ const INT32 uniform_grid_ID_of_Fields_to_trace[] = {
 //! for V/km,
 //! uniform_grid_TYPE_VELOCITY_FIELD for km/s and uniform_grid_TYPE_DENSITY_FIELD
 //! for 1/cm3
-const INT32 uniform_grid_Field_type[] = {
+const INT32 uniform_grid_Field_type[] = {uniform_grid_TYPE_BFIELD,uniform_grid_TYPE_EFIELD,
   uniform_grid_TYPE_DENSITY_FIELD,
   uniform_grid_TYPE_VELOCITY_FIELD,
   uniform_grid_TYPE_BFIELD,
@@ -1001,19 +1003,19 @@ const INT32 num_tracks_each_group = 100;
 //!-----------------------------------------------------------------
 
 //! Number of detector boxes
-const INT32 num_particle_detector = 0;
-const char Detector_FileName[][RUN_NAME_SIZE] = { "detector1",
-                                                    "detector2",
+const INT32 num_particle_detector = 2;
+const char Detector_FileName[][RUN_NAME_SIZE] = { "upstream",
+                                                    "pickup",
                                                     "detector3"};
 
 //! Detector Box Geometry
 
-const D_REAL detector_box_xmin[] = {-100000./SI_x0,0,0};
-const D_REAL detector_box_xmax[] = {-60000./SI_x0,0,0};
-const D_REAL detector_box_ymin[] = {-10000./SI_x0,0,0};
-const D_REAL detector_box_ymax[] = {10000./SI_x0,0,0};
-const D_REAL detector_box_zmin[] = {-10000./SI_x0,0,0};
-const D_REAL detector_box_zmax[] = {10000./SI_x0,0,0};
+const D_REAL detector_box_xmin[] = {-4.5*R_Moon,4.5*R_Moon,0};
+const D_REAL detector_box_xmax[] = {-4*R_Moon,5*R_Moon,0};
+const D_REAL detector_box_ymin[] = {-0.25*R_Moon,-0.25*R_Moon,0};
+const D_REAL detector_box_ymax[] = {0.25*R_Moon,0.25*R_Moon,0};
+const D_REAL detector_box_zmin[] = {-0.25*R_Moon,4*R_Moon,0};
+const D_REAL detector_box_zmax[] = {0.25*R_Moon,4.5*R_Moon,0};
 
 //!-------------------------------------------------------------//
 //!-------------- 3a) Numerical Parameter ----------------------//
@@ -1027,7 +1029,7 @@ const D_REAL detector_box_zmax[] = {10000./SI_x0,0,0};
 //! lacks at Blk Levl borders occur in flow direction.
 //! TODO MAX_LEVEL is set BELOW this parameter!
 // const D_REAL  dt =  0.1* RB_X*(BlkNds_X-2)/LX / (SW_v/SI_v0);
-const D_REAL  dt =  .1;//0.00125 * 5. * 4.;
+const D_REAL  dt =  .0002;//0.00125 * 5. * 4.;
 
 //! specify mesh type
 //! 1) UNIFORM
@@ -1040,7 +1042,7 @@ const INT32 mesh_type = UNIFORM;
 //! two step
 //! 1)   E = -uxB+...
 //! 2) dtB = -rotE
-const bool LF_one_step = true;
+const bool LF_one_step = false;
 
 //! Choose advance_B_Algorithm for Plasma Equations:
 //! 0: Leap Frog   (fast)
@@ -1065,18 +1067,18 @@ const D_REAL Eta_sw = 0.0;
 
 //! strength of EM-Field smoothing
 //! (set value for each refinement level)
-const bool several_smooth_in_levels = false; //! if true, smoothing is carried out 2^Level times
-const D_REAL smooth_Factor = 0.005;
+const bool several_smooth_in_levels = true; //! if true, smoothing is carried out 2^Level times
+const D_REAL smooth_Factor = 0.001;
 const D_REAL smooth_E[] = { smooth_Factor * 1., smooth_Factor * 2., smooth_Factor *4. , smooth_Factor * 8.};
 const D_REAL smooth_B[] = { smooth_Factor * 1., smooth_Factor * 2., smooth_Factor *4. , smooth_Factor * 8.};
 
 //! number & strength of smoothing the Resistivity profile of the obstacle
 //! values are used only if use_resistive_obstacle (section 6) is set to true 
-const INT32  num_smooth_eta = 5;
+const INT32  num_smooth_eta = 10;
 const D_REAL smooth_eta[] = {1./8. *0.5,  1./4. *0.5, 1./2. *0.5, 1. * 0.5,  1.* 0.5};
 
 #if defined(nonadiabatic_gradPE_TERM_smooth_PE)
-const D_REAL smooth_PE[] = { smooth_Factor * 1., smooth_Factor * 2., smooth_Factor *4. , smooth_Factor * 8.};
+const D_REAL smooth_PE[] = { smooth_Factor * 1, smooth_Factor * 2., smooth_Factor *4. , smooth_Factor * 8.};
 #endif
 
 
@@ -1093,7 +1095,7 @@ const D_REAL MCD_J2U = 1e-4;
 //! Minimal Charge Density (MCD_BField) is used 
 //! in "magnetice Field" function as an lower limit for rho.
 //! (rho meaning the total density of all ion species)
-const D_REAL MCD_BField = 0.20;
+const D_REAL MCD_BField = 0.10;
 
 
 
@@ -1102,7 +1104,7 @@ const D_REAL MCD_BField = 0.20;
 //!-------------------------------------------------------------//
 
 //! Number of maximal refinement-levels used
-const INT32 MAX_LEVEL = 0;   
+const INT32 MAX_LEVEL = 1;   
 
 
 //! Apply particle splitting and merging every x TL
@@ -1122,8 +1124,8 @@ const INT32 TL_MERGE = 1;
 
 //! define how many merge/split processes should be carried out in each cell
 //! -> the higher oPiC the higer these parameters should be set
-const int num_merge_each_cell = 500;
-const int num_split_each_cell = 100;
+const int num_merge_each_cell = 50;
+const int num_split_each_cell = 40;
 
 //! ---- DEFINE HOW TO SPLIT/MERGE -------------------------------
 //! Decide wheter to split heaviest or most centred particle
@@ -1136,11 +1138,11 @@ const bool split_heaviest_particle = true;
 //! best triple of particle is estimated beyond "num_particle_in_MergeList"
 //! particle. Since all particle are weight sorted it is ensured, that only
 //! the lightest particle on one cell are inside the mergelist
-const INT32 num_particle_in_MergeList = 0.5*(optimal_MPiC[0]+optimal_MPiC[1]);//+optimal_MPiC[2]+optimal_MPiC[3]);
+const INT32 num_particle_in_MergeList = 100;//0.5*(optimal_MPiC[0]+optimal_MPiC[1]+optimal_MPiC[2]);//+optimal_MPiC[2]+optimal_MPiC[3]);
 
 //! In order to avoid very high macroparticle numbers in the tail
 //! if cell position > merge_tail_distance => merge
-const D_REAL merge_tail_distance = 50.;
+const D_REAL merge_tail_distance = -4.;
 
 //! To slightly violate centre of mass conservation drastically
 //! reduces noise and avoids numerical artifacts
@@ -1162,13 +1164,13 @@ const INT32 num_randomize_position_split = 100;
 //! in general it should not be required to merge
 //! or split in the highest level when "fac_oMPiC_at_LevBoundBlks"
 //! is set to 8 or higher
-const bool do_merge_in_L[] = {true, true, true, true, true, true};
-const bool do_split_in_L[] = {true, true, true, true, true, true};
+const bool do_merge_in_L[] = {true, true, false, true, true, true};
+const bool do_split_in_L[] = {true, true, false, true, true, true};
 
 //! decide whether to split exclusively particle of certain
 //! species, eg. do not split planetary Ion species
-const bool do_split_in_species[] = {true, true, true};
-const bool do_merge_in_species[] = {true, true, true};
+const bool do_split_in_species[] = {true, true, false, false, false};
+const bool do_merge_in_species[] = {true, true, false, false, false};
 //! --------------------------------------------------------------
 
 
@@ -1180,7 +1182,7 @@ const bool do_merge_in_species[] = {true, true, true};
 
 //! increase oMPiC at boundary blocks neighbours in order to
 //! OBTAIN smoother transition
-const F_REAL fac_oMPiC_at_LevBoundBlks = 8.;
+const F_REAL fac_oMPiC_at_LevBoundBlks = 4.;
 
 
 //! decide wheter to smooth or to simply inject moments to parent:
@@ -1211,22 +1213,22 @@ const bool use_gather_blocks = false;
 const INT32 TL_REFINE_STATIC_CUBOID[] = {-1, -1, -1, -1, -1};
 
 //! "left, lower corner"
-const D_REAL minX_refBox_of_L[] = {-6.* R_Obstacle, -6.0* R_Obstacle, -3.5* R_Obstacle};
-const D_REAL minY_refBox_of_L[] = {-3.* R_Obstacle, -2.0* R_Obstacle, -2.0* R_Obstacle};
-const D_REAL minZ_refBox_of_L[] = {-3.* R_Obstacle, -2.0* R_Obstacle, -0.6666* R_Obstacle};
+const D_REAL minX_refBox_of_L[] = {-2.* R_Moon, -6.0* R_Obstacle, -3.5* R_Obstacle};
+const D_REAL minY_refBox_of_L[] = {-2.* R_Moon, -2.0* R_Obstacle, -2.0* R_Obstacle};
+const D_REAL minZ_refBox_of_L[] = {-2.* R_Moon, -2.0* R_Obstacle, -0.6666* R_Obstacle};
 //! "right, upper corner"
-const D_REAL maxX_refBox_of_L[] = { 0.* R_Obstacle,  0.0* R_Obstacle,  0.0* R_Obstacle};
-const D_REAL maxY_refBox_of_L[] = { 3.* R_Obstacle,  2.0* R_Obstacle,  2.0* R_Obstacle};
-const D_REAL maxZ_refBox_of_L[] = { 3.* R_Obstacle,  2.0* R_Obstacle,  0.6666* R_Obstacle};
+const D_REAL maxX_refBox_of_L[] = { 2.* R_Moon,  0.0* R_Obstacle,  0.0* R_Obstacle};
+const D_REAL maxY_refBox_of_L[] = { 2.* R_Moon,  2.0* R_Obstacle,  2.0* R_Obstacle};
+const D_REAL maxZ_refBox_of_L[] = { 2.* R_Moon,  2.0* R_Obstacle,  0.6666* R_Obstacle};
 
 
 //! B) SPHERE
 //! Specify radius of sphere in which Blks shall be refined
 
-const INT32 TL_REFINE_STATIC_SPHERE[] = {1, 1, 1, -1, -1};
+const INT32 TL_REFINE_STATIC_SPHERE[] = {0, 1, 1, -1, -1};
 
 
-const D_REAL radius_refSphere_of_L[] = { 100.0, 75.0, 50.0, 25.0, 10.0};
+const D_REAL radius_refSphere_of_L[] = { 2.5*R_Moon, 75.0, 50.0, 25.0, 10.0};
 
 
 //! C) Zylinder along x
@@ -1397,7 +1399,7 @@ const INT32 TL_reset_block_timing = 0;
 //! blocks among mpi processes
 //! Attention: Only some fields will be redistrubuted!!! 
 //! Problems with Neutral gas velocity and electron pressure!!!
-const INT32 TL_REDISTRIBUTE_BLOCKS = 500;
+const INT32 TL_REDISTRIBUTE_BLOCKS = 5000;
 
 
 //! distribute blocks with some time level offset
@@ -1407,7 +1409,7 @@ const INT32 TL_REDISTRIBUTE_BLOCKS = 500;
 //! (for some reason crashes are more likely
 //! (when values different from zero are used ???)
 //! (-> better set to zero)
-const INT32 OFFSET_REDISTRIBUTE_BLOCKS = 250;
+const INT32 OFFSET_REDISTRIBUTE_BLOCKS = 0;
 
 //! decide to assign children to respective parent or not
 const bool distribute_RB_based = false;
@@ -1429,7 +1431,7 @@ const bool redistribute_after_restore = true;
 //! BLOCK_NUMBER_INC_CHILDREN
 //! PARTICLE_TIME_INC_CHILDREN
 //! PARTICLE_NUMBER_INC_CHILDREN
-const INT32 distribution_criteria = PARTICLE_NUMBER;
+const INT32 distribution_criteria = BLOCK_NUMBER;
 
 //! Synchronisation of MPI Sends and Recieves
 //! true = send -> recieve -> wait
@@ -1497,8 +1499,8 @@ const bool run_accelerate_Particle = true;
 const bool run_collect_Ui_minus = true;
 const bool run_move_Particle = true;
 const bool run_Split_Merge_Particle = true;
-const bool run_negative_Particles = true;
-const bool run_delete_too_light_Particles = true;
+const bool run_negative_Particles = false;
+const bool run_delete_too_light_Particles = false;
 const bool run_inject_obstacle_ions = true;
 const bool run_collect_Rho_prepare_Recombination_Density = true;
 const bool run_chemical_Reactions = true;
@@ -1529,14 +1531,14 @@ const INT32 num_Particle_Species = NUM_PARTICLE_SPECIES;
 //! Still obstacle ions can be inserted, which is a 
 //! good (and especially fast) opportunity to find out,
 //! how an obstacle ion profile develops.
-const INT32 num_Inflow_Species = 0;
+const INT32 num_Inflow_Species = 2;
 
 //! Indices of inflow species.
 //! Exactly "num_Inflow_Species" integers have to be provided.
 //! Be carefull not to use the same species for inflow- and obstacle ion
 //! at the same time when editing "CHybrid_IonProfiles.cpp".
 //! Indices starting at 0 !!!
-const INT32 index_Inflow_Species[] = {0};
+const INT32 index_Inflow_Species[] = {0,1};
 
 
 //! define when start to inject respective species
@@ -1552,7 +1554,7 @@ const D_REAL duration_inject_species_each_xx_t0[] = {0 ,0, 0, 0, 0};
 //! Special Velocity Distribution
 //! true: ions which will injected at the boundaries or into empty cell will have a special distribution in velocity space. (c.f. CBlk_Part-Init.cpp -> fill_empty_Cell  for more details)
 //! false: ions will have a normal maxwellian velocity distribution
-const bool special_Velocity_Distribution[] = {false, false, false, false};
+const bool special_Velocity_Distribution[] = {false, false, false, false,false};
 
 
 //! CONCERNING BRACKETS BELOW:
@@ -1565,7 +1567,7 @@ const bool special_Velocity_Distribution[] = {false, false, false, false};
 //! During simulation the number of particles in a cell will change, so splitting
 //! and merging procedures try to adjust the active number to optimal_MPiC.
 // const INT32 optimal_MPiC[] = {50, 0, 0, 0,  0, 0};
-const INT32 optimal_MPiC[] = {100, 100, 0, 0,  0, 0};
+const INT32 optimal_MPiC[] = {10,10,10, 10,  10, 0};
 
 
 //! in case particles are split several times, their weight may decrease to values 
@@ -1582,10 +1584,11 @@ const D_REAL min_particle_weight = 1e-10;
 
 
 const D_REAL  Ion_Masses[] = {
-    1.,
-    1.,
-    0.,
-    0.,
+    16./16.,
+    1./16.,
+    2./16.,
+    16./16.,
+    28./16.,
     0.,
     0,
   };
@@ -1593,14 +1596,14 @@ const D_REAL  Ion_Masses[] = {
 const D_REAL Ion_Charges[] = { 
     1.,
     1.,
-    0.,
-    0.,
-    0.
+    1.,
+    1.,
+    1.
   };
 			     
 //! Plasma Densities for each inflow species.
 //! (values at indices of obstacle species will be ignored)
-const D_REAL rho_sw[] = {0., 0.,  0.,  0.,  0., 0.};
+const D_REAL rho_sw[] = {0.1/0.1, 0.01/0.15,  0.,  0.,  0., 0.};
 
 
 
@@ -1612,8 +1615,8 @@ const D_REAL rho_sw[] = {0., 0.,  0.,  0.,  0., 0.};
 //! species (e.g. in case of obstacle ions), directly specify
 //! temperature by using "Ti" variables.
 const D_REAL Ion_Betas[]  =  { 
-    0.,
-    0.,
+    calcBeta*2000*e/kB,
+    calcBeta*200.*e/kB,
     0.,
     0.,
     0
@@ -1622,15 +1625,15 @@ const D_REAL Ion_Betas[]  =  {
 //! allow for different temperature parallel and perpendicular to B
 //! TODO currently it is assumed that B0 points in z direction...
 //! "temperatures" have to be inserted in Joule
-const D_REAL Ti_para[] = {kB*0e6,kB*0*e};
-const D_REAL Ti_perp[] = {kB*0e6,kB*0*e};
+const D_REAL Ti_para[] = {kB*0e6,kB*0*e,0,0,0,0};
+const D_REAL Ti_perp[] = {kB*0e6,kB*0*e,0,0,0,0};
 
 
 //!electron temperature in K
-const D_REAL Te = kB*0e6;//1.35*e/kB;      
+const D_REAL Te = e/kB*100;//1.35*e/kB;      
 //! electron plasma betas for each Species.
 // const D_REAL Electron_Betas[]  = {calcBeta*Te, 0., 0., 0.};
-const D_REAL Electron_Betas[]  = {0., 0., 0., 0.};
+const D_REAL Electron_Betas[]  = {calcBeta*100*e/kB, calcBeta*100*e/kB, calcBeta*0.01*e/kB,calcBeta*0.01*e/kB,calcBeta*0.01*e/kB};
 
 //! Adiabatic exponent for equation of state
 const D_REAL kappa_electron =  2.0;
@@ -1641,7 +1644,7 @@ const D_REAL kappa_electron =  2.0;
 
 	//! Number of neutral species:
 	//! NOTE: has to be set in defines.h
-	const INT32 num_Neutral_Species = 0/*NUM_NEUTRAL_SPECIES*/;
+	const INT32 num_Neutral_Species = NUM_NEUTRAL_SPECIES;
 
 	//! use analytical expression for neutral density
 	const bool analytical_neutral_profile = true; 	
@@ -1653,14 +1656,14 @@ const D_REAL kappa_electron =  2.0;
 
 	//! Particle-masses of neutral species (total number of species is defined above)
 	// const D_REAL Neutral_Masses[] = { 18*amu/SI_m0, 1., 1., 1. };
-	const D_REAL Neutral_Masses[] = { 17.885, 1., 1., 1. };
+	const D_REAL Neutral_Masses[] = { 2.*amu/SI_m0, 16.*amu/SI_m0, 28.*amu/SI_m0, 1., 1. };
 
 	//! Beta of newly ionised electrons
-        const D_REAL NewElectron_Betas[]  = {0, 0*calcBeta*180., calcBeta*180., calcBeta*180.};
+        const D_REAL NewElectron_Betas[]  = {calcBeta*0.01*e/kB, 0.01*calcBeta*e/kB, 0.01*calcBeta*e/kB, calcBeta*180.};
 // 	const D_REAL NewElectron_Betas[]  = {0.*calcBeta*100., 0*calcBeta*180., calcBeta*180., calcBeta*180.};
 
 	//! temperature of neutral gas in Kelvin!
-	const D_REAL Neutral_Temperature[] = {180,1000,0,0};
+	const D_REAL Neutral_Temperature[] = {150,150,150,0};
 	
 	//! degrees of freedom of neutral species
 	//! for example 3 for a pointmass
@@ -1693,16 +1696,22 @@ const D_REAL kappa_electron =  2.0;
 //! since rates are usually given in cm^3/s, normalize by multiplying with	
 D_REAL RateNorm = SI_t0*1e-6*SI_n0;
 const D_REAL ReactionRate[][num_Particle_Species][NUM_NEUTRAL_SPECIES] =
-  { /* Species 0 */
-    {         /*NeutralSpec 0*/ /*NeutralSpec 1*/ 
-      /*destSpec 0*/ /*{*/ 0.0 ,    /*  0.0    },*/
-      // /*destSpec 1*/ /*{*/ 0.0 ,    /* 0.0      }*/
+  { 
+    {         
+       {1.94e-10*RateNorm, 7.33e-10*RateNorm,6.82e-10*RateNorm },{ 0.,0,0 },{ 0.,0,0 },{ 0.,0,0 },{ 0.,0,0 }
+    },
+    {       
+       { 0.,0,0 },{1.91e-9*RateNorm, 4.02e-9*RateNorm,3.36e-9*RateNorm },{ 0.,0,0 },{ 0.,0,0 },{ 0.,0,0 }
+     },
+    {
+	{ 0.,0,0 },{ 0.,0,0 },{ RateNorm*1.16e-10,RateNorm*2.76e-9,RateNorm*2.33e-9 },{ 0.,0,0 },{ 0.,0,0 }
+    },
+    {
+	{ 0.,0,0 },{ 0.,0,0 },{ 0.,0,0 },{ RateNorm*1.94e-10,RateNorm*7.33e-10,RateNorm*6.82e-10 },{0, 0,0}
+    },
+    {
+	{ 0.,0,0 },{ 0.,0,0 },{ 0.,0,0 },{ 0.,0,0 },{ RateNorm*1.13e-10,RateNorm*4.72e-10,RateNorm*4.57e-10 }
     }
-    // /* Species 1 */
-   // ,{         /*NeutralSpec 0*/ /*NeutralSpec 1*/
-      // /*destSpec 0*/ /*{*/    0.0      ,     /* 0.0      },*/
-      // /*destSpec 1*/ /*{*/    0.0      ,    /*  0.0      }*/
-    // }
   };
 
 //! apart from the constant rates in the array above, it is also possible to include a velocity-dependence of the reaction rate
@@ -1741,7 +1750,11 @@ const bool check_max_reaction_probability = true;
 	// };
 const D_REAL PhotoionisationRate[][NUM_NEUTRAL_SPECIES] =	{ 	 
 	//	   /*Neutralspec 0*/
-	/* Species 0*/ /*{*/    0.0     /* 0    },*/
+	/* Species 0*/ /*{*/ {   0.,0.,0.    }, /* 0    },*/
+			{ 0.,0.,0.},
+			{ 0.,0.,0.},
+			{ 0.,0.,0.},
+			{ 0.,0.,5.e-9}
 	};
 	
 //! Characteristic Frequency of Photoionisation in 1/s
@@ -1775,7 +1788,7 @@ const bool ElectronionisationRate_Te_dependent = false;
 	// /* Species 4*/ /*{*/ Ence_nu_e_total*0.0759/1.26*SI_t0  ,   /*0    }*/
 	// };	
 const D_REAL ElectronionisationRate[][NUM_NEUTRAL_SPECIES] =	{ 	 
-	0.0
+	{0.,0.,0.},{0.,0.,0.},{0.,0.,0.},{0.,0.,0.},{0.,0.,0.}
 	};	
 	
 	
@@ -1783,8 +1796,8 @@ const D_REAL ElectronionisationRate[][NUM_NEUTRAL_SPECIES] =	{
 //! entries in ions/s
 const D_REAL Global_IonProduction_Rate[][NUM_NEUTRAL_SPECIES] =	{ 	 
 	//	     /*Neutralspec 0*/, /*Neutralspec 1*/ ----
-	/*Species 0*/ /*{*/    1.3e+24 ,    /*0.0     },*/
-	/*Species 1*/ /*{*/    1.3e+36 ,    /*0.0     }*/
+	/*Species 0*/ /*{*/    0 ,    /*0.0     },*/
+	/*Species 1*/ /*{*/    0 ,    /*0.0     }*/
 	};	
 
 
@@ -1793,10 +1806,11 @@ const D_REAL Global_IonProduction_Rate[][NUM_NEUTRAL_SPECIES] =	{
 //! NOTE: if ions are inserted by ionization of neutral profile,
 //! the number of inserted ions is adjusted to this value
 const INT32 obstacle_MP_num_each_TL[] = {     
-    64,
-    64,
-    0,
-    0,
+    200,
+    200,
+    200,
+    200,
+    200,
     0
   };
 //! Next tracer currently only work with inject_sphere_source() function. It uses 
@@ -1877,24 +1891,24 @@ const INT32 en_water_neutral_species = 0;
 	//! the neutral density itself is, however, necessary for the electron pressure
 	//! and therefore two different fields are necessary
 	
-	const INT32 num_ion_prod_fields = 0;
+	const INT32 num_ion_prod_fields = 3;
 
 	//! use ion_prod density profile from file
-	const bool ion_prod_profile_from_file = false; 
+	const bool ion_prod_profile_from_file = true; 
 	
 	//! file names for reading extern fields
-	const char extern_IonProdField_name[][80]= { "../../../StaubFeld10B.dat",
-							"lineY",
-							"lineZ"};
+	const char extern_IonProdField_name[][80]= { "../../profiles/Titan/H2_Titan_TA_new",
+							"../../profiles/Titan/CH4_Titan_TA_new",
+							"../../profiles/Titan/N2_Titan_TA_new"};
 
 	//! calculate the ion production profile of the neutral field
 	//! that results from photoabsorption (Chapman profile)	
-	const bool calc_ionProd_from_neutral_field = true;
+	const bool calc_ionProd_from_neutral_field = false;
 
 	//! set analytical ion production profile to field
 	//! e.g. analytical Chapman profile or modify neutral profile
 	//! to consider shadow of moon or planet
-	const bool set_analytical_ionProd_profile = true;
+	const bool set_analytical_ionProd_profile = false;
 							
 #endif		
 
@@ -1946,7 +1960,7 @@ const char extern_Field_name[][RUN_NAME_SIZE] = { "/velocity_ionization_field.tx
 
 //! decide if use resistivity inside obstacle
 //! details are specified in CBlk_EtaProfiles.cpp
-const bool use_resistive_obstacle = false;
+const bool use_resistive_obstacle = true;
 
 
 //! OBSTACLE MAGNETIC Field calculation.
@@ -1955,21 +1969,21 @@ const bool use_resistive_obstacle = false;
 const bool advance_obstacle_B = true;
 
 //! OM2) choose relaxations parameter for SOR
-const D_REAL B_SOR_omega_L[] = {1., 1., 1., 1.};
+const D_REAL B_SOR_omega_L[] = {1.15, 1.2, 1.3, 1.};
 //{1.2, 1.3, 1.35, 1.4};
-
+//const D_REAL B_SOR_omega_L[] = {1.3, 1.4, 1., 1.};
 //! OM3) choose break criteria for SOR
-const D_REAL B_SOR_max_error = 1.e-4;
+const D_REAL B_SOR_max_error = 1.e-3;
 
 //! OM4) B_SOR_num_cycle_base^L cycles will be performed
 //!      in level L each iterations
-const INT32 B_SOR_num_cycle_base = 3;
+const INT32 B_SOR_num_cycle_base = 2;
 
 //! OM5) choose maximal number of iterations for SOR
-const INT32 B_SOR_max_Iteration = 1000;
+const INT32 B_SOR_max_Iteration = 2000;
 
 //! OM6) calc error every xx TL
-const INT32 B_SOR_calc_error_step = 4;
+const INT32 B_SOR_calc_error_step = 3;
 
 
 //! DIVERGENCE CLEANER (DC)
@@ -1977,8 +1991,8 @@ const INT32 B_SOR_calc_error_step = 4;
 const bool div_cleaner = true;
 
 //! DC2) choose relaxations parameter for SOR
-const D_REAL DC_omega_L[] = {1.72, 1.78, 1.88, 1.92};
-
+//const D_REAL DC_omega_L[] = {1.72, 1.78, 1.88, 1.92};
+const D_REAL DC_omega_L[] = {1.72, 1.78, 1.75, 1.92};
 //! DC3) choose break criteria for SOR
 const D_REAL DC_max_error = 1.e-3;
 
@@ -1987,10 +2001,10 @@ const D_REAL DC_max_error = 1.e-3;
 const INT32 DC_num_cycle_base = 2;
 
 //! DC5) choose maximal number of iterations for SOR
-const INT32 DC_max_Iteration = 2000;
+const INT32 DC_max_Iteration = 1000;
 
 //! DC6) calc error every xx TL
-const INT32 DC_calc_error_step = 8;
+const INT32 DC_calc_error_step = 3;
 
 
 //! The relaxation parameters B_SOR_omega_L[] and DC_omega_L[]
@@ -2018,7 +2032,7 @@ const bool advance_obstacle_E = true;
 //! within the core no magnetic field is advanced nor smoothed
 //! (-> it will remain the initial field forever)
 //! in % of obstacle radius
-const D_REAL obstacle_core_fraction = 0.6;
+const D_REAL obstacle_core_fraction = 0.;
 
 
 //! densities for each ion species to eliminate strong electron pressure 

@@ -1484,7 +1484,7 @@ void CHybrid::do_consistency_check_init_derived_variables(void)
 	log_file <<  " Delta g = "<<LX/(pow(2,MAX_LEVEL)*RB_X*(BlkNds_X-2))<<" = "<<LX/(pow(2,MAX_LEVEL)*RB_X*(BlkNds_X-2))*SI_x0*1.e-03<<" km"<<endl;
 	
 	for(INT32 spec=0;spec<num_Charged_Species;spec++)
-	log_file <<  " rgyro (species "<<spec<<") = "<<Ion_Charges[spec]*vec_len(B_sw)/Ion_Masses[spec]*vec_len(V_sw)<<" = "<<Ion_Charges[spec]*vec_len(B_sw)/Ion_Masses[spec]*vec_len(V_sw)*SI_x0*1.e-03<<" km"<<endl;
+	log_file <<  " rgyro (species "<<spec<<") = "<<pow(Ion_Charges[spec]*vec_len(B_sw)/Ion_Masses[spec]*vec_len(V_sw),-1)<<" = "<<pow(Ion_Charges[spec]*vec_len(B_sw)/Ion_Masses[spec]*vec_len(V_sw),-1)*SI_x0*1.e-03<<" km"<<endl;
 	
 	log_file<<endl;
 	

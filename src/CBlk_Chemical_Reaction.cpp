@@ -516,37 +516,12 @@ D_REAL calc_reaction_rate(PARTICLE_REAL* v, INT32 species, INT32 dest_species, I
 		INT32 v_array = int(vec_len(v)*SI_v0*1e-03);
 		if(v_array<1)
 		v_array=1;
-		if(v_array>=30)
-		v_array=29;
+		if(v_array>=499)
+		v_array=499;
 		
 		//! rates for charge_exchange channel of O+ + H2O -> H2O+ + O	
-		if(species==0)
-		{
-			if(dest_species == 2)
-			rate_of_reaction += velocity_rate[v_array][species];
-		}
+		rate_of_reaction += velocity_rate[v_array][species][dest_species][neutral_species];
 		
-		//! rates for OH+ + H2O -> H2O+ + OH	
-		//! (identical to O+ + H2O, just with different mass)
-		if(species==1)
-		{
-			if(dest_species == 2)
-			rate_of_reaction += velocity_rate[v_array][species];
-		}
-		
-		//! rates for H2O+ + H2O -> H2O+ + H2O	
-		if(species==2)
-		{
-			if(dest_species == 2)
-			rate_of_reaction += velocity_rate[v_array][species];
-		}
-		
-		//! rates for charge exchange channel H+ + H2O -> H2O+ + H	
-		if(species==4)
-		{
-			if(dest_species == 2)
-			rate_of_reaction += velocity_rate[v_array][species];
-		}
 		
 		return rate_of_reaction;
 

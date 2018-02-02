@@ -30,8 +30,65 @@ void CBlock::which_neutral_profile(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneu
 {
 	// neutral_profile_Enceladus(neutralSpecies, x, Nneutral, VNeutral);
 // 	init_Cometary_Neutral_Profile(neutralSpecies, x, Nneutral, VNeutral);
-  init_neutral_profile_test(neutralSpecies, x, Nneutral, VNeutral);
+  	//init_neutral_profile_test(neutralSpecies, x, Nneutral, VNeutral);
+	//init_neutral_profile_Pluto(neutralSpecies, x, Nneutral, VNeutral);
+	barometric_neutral(neutralSpecies, x, Nneutral, VNeutral);
 }	
+
+void CBlock::barometric_neutral(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneutral, D_REAL *VNeutral)
+{
+      D_REAL absr=vec_len(x);
+      if(neutralSpecies==2)//N2
+	{
+      		D_REAL exponent =  (absr/R_Moon-1.)*(2575/66.3);
+      		if(absr > R_Moon+900000./SI_x0 && absr < R_Moon + 2*2575000./SI_x0)
+			Nneutral[0] = 3.21e+22*exp(-exponent)/SI_n0;
+	        else Nneutral[0] = 0.;
+	}
+      else if(neutralSpecies==1)//CH4
+	{
+		D_REAL exponent =  (absr/R_Moon-1.)*(2575/90.6);
+		if(absr > R_Moon+900000./SI_x0 && absr < R_Moon + 2*2575000./SI_x0)
+			Nneutral[0] = 1.06e+19*exp(-exponent)/SI_n0;
+		else Nneutral[0] = 0.;	
+	}
+      else if(neutralSpecies==0)//H2
+	{
+		if(absr > R_Moon+900000./SI_x0 && absr<=R_Moon+1225000./SI_x0){
+			D_REAL exponent = (absr/R_Moon-1.)*(2575/69.8);
+			Nneutral[0] = 5.82e+19*exp(-exponent)/SI_n0;}
+		else if(absr > R_Moon + 1225000./SI_x0 && absr < R_Moon + 3*2575000./SI_x0){
+			D_REAL exponent = (absr/R_Moon -1.)*(2575/297.6);
+			Nneutral[0] = 8.52e+13*exp(-exponent)/SI_n0;}
+		else Nneutral[0] = 0;
+	}
+	
+      VNeutral[0]=0.;
+      VNeutral[1]=0.;
+      VNeutral[2]=0.;
+}
+
+
+void CBlock::init_neutral_profile_Pluto(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneutral, D_REAL *VNeutral)
+{
+      D_REAL absr=vec_len(x)/R_Moon;
+      if(neutralSpecies==0)//N2
+        {
+                if(absr > 1.63 )
+                        Nneutral[0] = 1/SI_n0*(1.e+20*exp(-1184*(absr-1)/82.4)+1.e+16*exp(-1184*(absr-1.5)/54.7)+1.e+13*exp(-1184*(absr-2)/318.5));
+                else Nneutral[0] = 0.;
+        }
+      else if(neutralSpecies==1)//CH4
+        {
+                if(absr > 1.63 )
+          		Nneutral[0] = 1/SI_n0*(1.e+18*exp(-1184*(absr-1)/88.3)+7.64e+13*exp(-1184*(absr-1.5)/161.5)+9.47e+12*exp(-1184*(absr-2)/509.4));
+                else Nneutral[0] = 0.;
+        }
+
+      VNeutral[0]=0.;
+      VNeutral[1]=0.;
+      VNeutral[2]=0.;
+}
 
 
 

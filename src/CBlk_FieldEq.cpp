@@ -78,15 +78,14 @@ extern ofstream log_file;
 //!-------------------------------------------------------------//
 void CBlock::show_PE(INT32 species)
 {
-	
+	D_REAL* PE  = Field_Type[id_PESpecies1  + species];
+	D_REAL* rho = Field_Type[id_rhoSpecies1 + species];	
 #if defined nonadiabatic_gradPE_TERM
 	//  nothing to do because PE is already computed
 	return;
 #else
-    D_REAL* PE  = Field_Type[id_PESpecies1    +species];
-    D_REAL* rho = Field_Type[id_allRhoSpecies +species];
-    for(INT32 node=0; node<num_nodes_in_block; node++)
-        PE[node] = Electron_Betas[species] *pow(rho[node],kappa_electron);
+        for(INT32 node=0; node<num_nodes_in_block; node++)
+	PE[node] = Electron_Betas[species] *pow(rho[node],kappa_electron);
 	//return;
 #endif
 	

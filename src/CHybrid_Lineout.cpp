@@ -26,56 +26,56 @@ void CHybrid::get_positions_from_analytical_formula(INT32 id_line, INT32 &num_po
 	//! --- X-Achse
 	if(id_line==0) {
 	  //! Start Position
-	  start_pos[0] = -Box_Origin[0];
-	  start_pos[1] = 0.;
+	  start_pos[0] = -20*R_Moon;//-Box_Origin[0];
+	  start_pos[1] = 17.65*R_Moon;
 	  start_pos[2] = 0.;
 	  //! Direction Vector
 	  //! normalised
-	  line_vec[0] = 1.;
-	  line_vec[1] = 0.;
+	  line_vec[0] = 0.9645;
+	  line_vec[1] = -0.2638;
 	  line_vec[2] = 0.;
 	  //! Stop Position
-	  stop_pos[0] = (LX-Box_Origin[0])-1;
-	  stop_pos[1] = 0.;
+	  stop_pos[0] = 50*R_Moon;
+	  stop_pos[1] = -1.5*R_Moon;
 	  stop_pos[2] = 0.;
 	}
 	
 		//! --- 300kmX-Achse
 	if(id_line==1) {
 	  //! Start Position
-	  start_pos[0] = -Box_Origin[0];
-	  start_pos[1] = 1.38;
-	  start_pos[2] = 0.;
+	  start_pos[0] = -20*R_Moon;
+	  start_pos[1] = 192./11.*R_Moon;
+	  start_pos[2] = -36./11.*R_Moon;
 	  //! Direction Vector
 	  //! normalised
-	  line_vec[0] = 0.;
-	  line_vec[1] = 0.;
-	  line_vec[2] = 1.;
+	  line_vec[0] = 0.9643;
+	  line_vec[1] = -0.2605;
+	  line_vec[2] = 0.0476;
 	  //! Stop Position
-	  stop_pos[0] = (LX-Box_Origin[0])-1;
-	  stop_pos[1] = 1.38;
-	  stop_pos[2] = 0.;
+	  stop_pos[0] = 50.*R_Moon;
+	  stop_pos[1] = -16./11.*R_Moon;
+	  stop_pos[2] = 2./11.*R_Moon;
 	}
 	
 	//! --- Y-Achse
-	if(id_line==3) {
+	if(id_line==2) {
 	  //! Start Position
-	  start_pos[0] = 0.;
-	  start_pos[1] = -Box_Origin[1];
-	  start_pos[2] = 0.;
+	  start_pos[0] = -20.*R_Moon;
+	  start_pos[1] = 192./11.*R_Moon;
+	  start_pos[2] = 36./11.*R_Moon;
 	  //! Direction Vector
 	  //! normalised
-	  line_vec[0] = 0.;
-	  line_vec[1] = 1.;
-	  line_vec[2] = 0.;
+	  line_vec[0] = 0.9643;
+	  line_vec[1] = -0.2605;
+	  line_vec[2] = -0.0476;
 	  //! Stop Position
-	  stop_pos[0] = 0.;
-	  stop_pos[1] = (LX-Box_Origin[1])-1;
-	  stop_pos[2] = 0.;
+	  stop_pos[0] = 50.*R_Moon;
+	  stop_pos[1] = -16./11.*R_Moon;
+	  stop_pos[2] = -2./11.*R_Moon;
 	}
 	
 	//! --- Z-Achse
-	if(id_line==2) {
+	if(id_line==3) {
 	  //! Start Position
 	  start_pos[0] = 0.;
 	  start_pos[1] = 0.;

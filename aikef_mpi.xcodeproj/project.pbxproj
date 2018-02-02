@@ -249,6 +249,7 @@
 		3F6C5B702022638B00B12156 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				3F6C5B9C2022638B00B12156 /* aikef_mpi.cpp */,
 				3F6C5B712022638B00B12156 /* CBlk_Interpol.cpp */,
 				3F6C5B722022638B00B12156 /* CBlk_Part-Gather.cpp */,
 				3F6C5B732022638B00B12156 /* parameters.cpp */,
@@ -292,7 +293,6 @@
 				3F6C5B992022638B00B12156 /* CBlk_FileCom.cpp */,
 				3F6C5B9A2022638B00B12156 /* CBlk_MPI_PartCom.cpp */,
 				3F6C5B9B2022638B00B12156 /* CBlk_IonProfile.cpp */,
-				3F6C5B9C2022638B00B12156 /* aikef_mpi.cpp */,
 				3F6C5B9D2022638B00B12156 /* CBlk_Dust.cpp */,
 				3F6C5B9E2022638B00B12156 /* CHybrid_FieldNames.cpp */,
 				3F6C5B9F2022638B00B12156 /* CHybrid_FileCom.cpp */,
@@ -600,10 +600,15 @@
 		3F2B6F222022634700869275 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CXX0X_EXTENSIONS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(EFFECTIVE_PLATFORM_NAME)";
 				CONFIGURATION_TEMP_DIR = "$(BUILD_DIR)/$(EFFECTIVE_PLATFORM_NAME)";
 				DEVELOPMENT_TEAM = KB22EGXEQA;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/usr/local/Cellar/cspice/66/include,
@@ -621,6 +626,22 @@
 					/usr/local/Cellar/gsl/2.4/lib,
 					"/usr/local/Cellar/open-mpi/3.0.0_2/lib",
 					/usr/local/opt/libevent/lib,
+				);
+				OTHER_CFLAGS = (
+					"-march=native",
+					"-mtune=native",
+					"-m64",
+					"-msse4",
+					"-msse4.1",
+					"-msse4.2",
+					"-O3",
+					"-fno-builtin",
+					"-fno-rtti",
+					"-ffunction-sections",
+					"-fno-signed-zeros",
+					"-Wall",
+					"-Wextra",
+					"-pedantic",
 				);
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -639,10 +660,15 @@
 		3F2B6F232022634700869275 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CXX0X_EXTENSIONS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(EFFECTIVE_PLATFORM_NAME)";
 				CONFIGURATION_TEMP_DIR = "$(BUILD_DIR)/$(EFFECTIVE_PLATFORM_NAME)";
 				DEVELOPMENT_TEAM = KB22EGXEQA;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = automatic;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/usr/local/Cellar/cspice/66/include,
@@ -660,6 +686,22 @@
 					/usr/local/Cellar/gsl/2.4/lib,
 					"/usr/local/Cellar/open-mpi/3.0.0_2/lib",
 					/usr/local/opt/libevent/lib,
+				);
+				OTHER_CFLAGS = (
+					"-march=native",
+					"-mtune=native",
+					"-m64",
+					"-msse4",
+					"-msse4.1",
+					"-msse4.2",
+					"-O3",
+					"-fno-builtin",
+					"-fno-rtti",
+					"-ffunction-sections",
+					"-fno-signed-zeros",
+					"-Wall",
+					"-Wextra",
+					"-pedantic",
 				);
 				OTHER_LDFLAGS = (
 					"-lz",

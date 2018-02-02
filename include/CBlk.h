@@ -257,11 +257,14 @@ public:
 #if defined(nonadiabatic_gradPE_TERM) || defined(use_neutral_species_as_field)
   void which_neutral_profile(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneutral, D_REAL *VNeutral);
   void set_analytical_neutral_profile(INT32 neutralSpecies);    
+  void barometric_neutral(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneutral, D_REAL *VNeutral);
   void init_Cometary_Neutral_Profile(INT32 neutralSpecies,  D_REAL *x, D_REAL *Nneutral, D_REAL *Vneutral);
   void neutral_profile(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneutral, D_REAL *Vneutral);
   void neutral_profile_Enceladus(INT32 neutralSpecies, D_REAL *x, D_REAL *Nneutral, D_REAL *Vneutral);
+  void insert_ions_from_ionprod_file(INT32 insert_every_x_TL, INT32 id_oct, INT64* num_injected_particles_thisTL);
   void insert_ions_from_neutral_profile(INT32 insert_every_x_TL, INT32 id_oct, INT64* num_injected_particles_thisTL);
   void init_neutral_profile_test(INT32 neutralSpecies, D_REAL* x, D_REAL* Nneutral, D_REAL* VNeutral);
+  void init_neutral_profile_Pluto(INT32 neutralSpecies, D_REAL* x, D_REAL* Nneutral, D_REAL* VNeutral);
 #endif
 
 
@@ -906,7 +909,7 @@ void getMesh(INT32 id_oct, ofstream& outfile);
     void analyze_chemistry(D_REAL*& density, INT32& nodes);
 
     
-   void set_Hint_to_field(INT32 src_field_id, INT32 dest_field_id, double *num_Nodes, D_REAL *Origin,
+   void set_Hint_to_field(INT32 src_field_id, INT32 dest_field_id, short *num_Nodes, D_REAL *Origin,
 			     D_REAL *Length,
 			     D_REAL *fieldarray,
 			     bool *integration_axis);
