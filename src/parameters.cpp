@@ -604,9 +604,9 @@ const INT32  TL_OUTPUT_2D_SILO         =   00000;
 const INT32  TL_OUTPUT_2D_NATIVE       =   0;
 const INT32  TL_OUTPUT_2D_GNUPLOT      =   0;
 
-const INT32  TL_OUTPUT_3D_SILO         = 100000;
+const INT32  TL_OUTPUT_3D_SILO         = 100;
 const INT32  TL_OUTPUT_3D_NATIVE       =   0;
-const INT32  TL_OUTPUT_3D_uniform_grid =  100000;
+const INT32  TL_OUTPUT_3D_uniform_grid =  100;
 const INT32  TL_OUTPUT_3D_ASCII        =   0;
 
 //! Enable HDF5 GZIP Compresion for SILO-Output
@@ -671,8 +671,8 @@ const bool secure_state_file = false;
 //! resubmit of jobfile
 //!resubing job if TL_Max is not reached at the end of the Walltime
 //!Walltime must be in second
-bool resubmit_enable = true;
-const INT32 resubmit_walltime =12*3600;
+bool resubmit_enable = false;
+const INT32 resubmit_walltime =.5*3600;
 const char resubmit_jobscript[100] = "msub job.sh";
 const INT32 resubmit_security_factor = 60*12;
 
